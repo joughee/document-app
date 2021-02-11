@@ -1,0 +1,12 @@
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\bin\Debug\netcoreapp3.1\DemoApp.DataAccess.dll
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\obj\Debug\netcoreapp3.1\DemoApp.DataStore.csprojAssemblyReference.cache
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\obj\Debug\netcoreapp3.1\DemoApp.DataStore.AssemblyInfoInputs.cache
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\obj\Debug\netcoreapp3.1\DemoApp.DataStore.AssemblyInfo.cs
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\obj\Debug\netcoreapp3.1\DemoApp.DataStore.csproj.CoreCompileInputs.cache
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\bin\Debug\netcoreapp3.1\DemoApp.DataStore.deps.json
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\bin\Debug\netcoreapp3.1\DemoApp.DataStore.dll
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\bin\Debug\netcoreapp3.1\DemoApp.DataStore.pdb
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\bin\Debug\netcoreapp3.1\DemoApp.DataAccess.pdb
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\obj\Debug\netcoreapp3.1\DemoApp.DataStore.csproj.CopyComplete
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\obj\Debug\netcoreapp3.1\DemoApp.DataStore.dll
+C:\Users\jough\source\repos\DemoApp\DemoApp.Infrastructure\obj\Debug\netcoreapp3.1\DemoApp.DataStore.pdb

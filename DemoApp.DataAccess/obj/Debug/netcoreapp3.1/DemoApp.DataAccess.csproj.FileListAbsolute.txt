@@ -1,0 +1,9 @@
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\obj\Debug\netcoreapp3.1\DemoApp.DataAccess.csprojAssemblyReference.cache
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\obj\Debug\netcoreapp3.1\DemoApp.DataAccess.AssemblyInfoInputs.cache
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\obj\Debug\netcoreapp3.1\DemoApp.DataAccess.AssemblyInfo.cs
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\obj\Debug\netcoreapp3.1\DemoApp.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\bin\Debug\netcoreapp3.1\DemoApp.DataAccess.deps.json
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\bin\Debug\netcoreapp3.1\DemoApp.DataAccess.dll
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\bin\Debug\netcoreapp3.1\DemoApp.DataAccess.pdb
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\obj\Debug\netcoreapp3.1\DemoApp.DataAccess.dll
+C:\Users\jough\source\repos\DemoApp\DemoApp.DataAccess\obj\Debug\netcoreapp3.1\DemoApp.DataAccess.pdb

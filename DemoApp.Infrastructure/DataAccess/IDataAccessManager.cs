@@ -32,7 +32,7 @@ namespace DemoApp.Infrastructure.DataAccess
         //        _dbConnection.
         //    }
         //}
-        Task<int> CreateUser(User user);
+        Task<int?> CreateUser(User user);
         Task<User> GetUserById(int id);
         Task<User> GetUserByUserName(string username);
         Task<bool> UpdateUser(User user);
@@ -42,7 +42,7 @@ namespace DemoApp.Infrastructure.DataAccess
         Task<bool> DeleteUserRole(int userId, string role);
         Task<Document> DownloadDocument(int id);
         //Task<IEnumerable<Document>> DownloadUserDocuments(int userId);
-        Task<int> UploadDocument(Document document);
+        Task<int?> UploadDocument(Document document);
         //Task<Document> UpdateDocument(Document document);
         //Task DeleteDocument(int id);
         //Task DeleteDocuments(int[] ids);

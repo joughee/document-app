@@ -13,6 +13,7 @@ using static DemoApp.Api.Statics;
 namespace DemoApp.Api.Controllers
 {
     [Authorize(Roles = Roles.Administrator)]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -30,7 +31,7 @@ namespace DemoApp.Api.Controllers
             return await _userService.Authenticate(authRequest);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
             var user = await _userService.GetUserById(id);
@@ -39,7 +40,7 @@ namespace DemoApp.Api.Controllers
         }
         
         [HttpGet("{username}")]
-        public async Task<IActionResult> Get(string username)
+        public async Task<IActionResult> GetByUsername(string username)
         {
             var user = await _userService.GetUserByUserName(username);
 

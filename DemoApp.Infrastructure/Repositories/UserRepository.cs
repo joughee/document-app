@@ -22,16 +22,25 @@ namespace DemoApp.Infrastructure.Repositories
         }
         public async Task<User> GetUserById(int id)
         {
-            return await _dataAccess.GetUserById(id);
+            var user = await _dataAccess.GetUserById(id);
+            if (user != null)
+            {
+                user.Roles = await _dataAccess.GetUserRoles(user.Id);
+            }
+
+            return user;
         }
         public async Task<User> GetUserByUserName(string username)
         {
             var user = await _dataAccess.GetUserByUserName(username);
-            user.Roles = await _dataAccess.GetUserRoles(user.Id);
+            if (user != null)
+            {
+                user.Roles = await _dataAccess.GetUserRoles(user.Id);
+            }
 
             return user;
         }
-        public async Task<int> CreateUser(User user)
+        public async Task<int?> CreateUser(User user)
         {
             return await _dataAccess.CreateUser(user);
         }

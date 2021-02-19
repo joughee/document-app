@@ -17,6 +17,333 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: fn_document_delete(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_document_delete(id integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		DELETE FROM documents WHERE id = id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_document_delete(id integer) OWNER TO postgres;
+
+--
+-- Name: fn_document_get_by_id(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_document_get_by_id(doc_id integer) RETURNS TABLE(id integer, name character varying, description character varying, insert_user_id integer, insert_date_time time without time zone, modify_user_id integer, modify_date_time time without time zone)
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		RETURN QUERY 
+		SELECT d.id, d.name, d.description, d.insert_user_id, d.insert_date_time, d.modify_user_id, d.modify_date_time
+		FROM documents d
+		WHERE d.id = doc_id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_document_get_by_id(doc_id integer) OWNER TO postgres;
+
+--
+-- Name: fn_document_insert(character varying, text, character varying[], integer, time without time zone); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_document_insert(name character varying, description text, categories character varying[], user_id integer, date_time time without time zone) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		INSERT INTO documents (id, name, description, categories, insert_user_id, insert_date_time) 
+		VALUES (default, name, description, categories, user_id, date_time)
+		RETURNING id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_document_insert(name character varying, description text, categories character varying[], user_id integer, date_time time without time zone) OWNER TO postgres;
+
+--
+-- Name: fn_document_update(character varying, text, character varying[], integer, time without time zone); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_document_update(name character varying, description text, categories character varying[], modify_user_id integer, modify_date_time time without time zone) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+	UPDATE documents 
+	SET name = name, description = description, categories = categories, modify_user_id = modify_user_id, modify_date_time = modify_date_time
+	WHERE id = id;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_document_update(name character varying, description text, categories character varying[], modify_user_id integer, modify_date_time time without time zone) OWNER TO postgres;
+
+--
+-- Name: fn_group_user_delete(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_group_user_delete(group_id integer, user_id integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		DELETE FROM group_users WHERE group_id = group_id AND user_id = user_id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_group_user_delete(group_id integer, user_id integer) OWNER TO postgres;
+
+--
+-- Name: fn_group_user_insert(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_group_user_insert(group_id integer, user_id integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		INSERT INTO group_users (group_id, user_id) 
+		VALUES (group_id, user_id)
+		RETURNING id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_group_user_insert(group_id integer, user_id integer) OWNER TO postgres;
+
+--
+-- Name: fn_user_delete(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_delete(id integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		DELETE FROM users WHERE id = id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_user_delete(id integer) OWNER TO postgres;
+
+--
+-- Name: fn_user_get_by_id(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_get_by_id(user_id integer) RETURNS TABLE(id integer, email_address character varying, password character varying, active boolean)
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		RETURN QUERY 
+		SELECT u.id, u.email_address, u.password, u.active 
+		FROM users u
+		WHERE u.id = user_id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_user_get_by_id(user_id integer) OWNER TO postgres;
+
+--
+-- Name: fn_user_get_by_name(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_get_by_name(user_name character varying) RETURNS TABLE(id integer, email_address character varying, password character varying, active boolean)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+		RETURN QUERY 
+		SELECT u.id, u.email_address, u.password, u.active 
+		FROM users u
+		WHERE u.email_address = user_name;
+	END;
+$$;
+
+
+ALTER FUNCTION public.fn_user_get_by_name(user_name character varying) OWNER TO postgres;
+
+--
+-- Name: fn_user_insert(character varying, character varying, boolean, character varying[]); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_insert(email_address character varying, password character varying, active boolean, roles character varying[]) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE new_id integer;
+BEGIN 
+	INSERT INTO users (email_address, password, active) 
+	VALUES (email_address, password, active)
+	RETURNING id INTO new_id;
+
+	INSERT INTO user_roles (user_id, role)
+	SELECT new_id, r
+	FROM unnest(roles) r;
+	
+	return new_id;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_user_insert(email_address character varying, password character varying, active boolean, roles character varying[]) OWNER TO postgres;
+
+--
+-- Name: fn_user_role_delete(integer, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_role_delete(user_id integer, role character varying) RETURNS void
+    LANGUAGE plpgsql
+    AS $$ 
+BEGIN 
+	DELETE FROM user_roles
+	WHERE user_id = user_id
+		AND role = role;
+END;$$;
+
+
+ALTER FUNCTION public.fn_user_role_delete(user_id integer, role character varying) OWNER TO postgres;
+
+--
+-- Name: fn_user_role_insert(integer, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_role_insert(user_id integer, role character varying) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		INSERT INTO user_roles (id, user_id, role) 
+		VALUES (default, user_id, role)
+		ON CONFLICT (user_id) WHERE role = role DO NOTHING
+		RETURNING id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_user_role_insert(user_id integer, role character varying) OWNER TO postgres;
+
+--
+-- Name: fn_user_roles_get(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_roles_get(u_id integer) RETURNS TABLE(role character varying)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+		RETURN QUERY 
+		SELECT r.role
+		FROM user_roles r
+		WHERE r.user_id = u_id;
+	END;
+$$;
+
+
+ALTER FUNCTION public.fn_user_roles_get(u_id integer) OWNER TO postgres;
+
+--
+-- Name: fn_user_update(integer, character varying, boolean, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_update(id_param integer, email_address_param character varying, active_param boolean, password_param character varying DEFAULT NULL::character varying) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+	UPDATE users
+	SET email_address = email_address_param,
+	active = active_param
+	WHERE id = id_param;
+	
+	IF password_param IS NOT NULL THEN
+		UPDATE users 
+		SET password = password_param
+		WHERE id = id_param;
+	END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_user_update(id_param integer, email_address_param character varying, active_param boolean, password_param character varying) OWNER TO postgres;
+
+--
+-- Name: fn_user_user_groups_get(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_user_user_groups_get(u_id integer) RETURNS TABLE(id integer, name character varying, active boolean)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+	RETURN QUERY 
+	SELECT g.id, g.name, g.active
+	FROM user_groups g
+	INNER JOIN group_users u on g.id = u.group_id
+	WHERE u.user_id = u_id;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_user_user_groups_get(u_id integer) OWNER TO postgres;
+
+--
+-- Name: fn_usergroup_delete(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_usergroup_delete(id integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$ 
+BEGIN 
+	DELETE FROM group_users WHERE group_id = id;
+	DELETE FROM user_groups WHERE id = id;
+END;$$;
+
+
+ALTER FUNCTION public.fn_usergroup_delete(id integer) OWNER TO postgres;
+
+--
+-- Name: fn_usergroup_get(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_usergroup_get(group_id integer) RETURNS TABLE(id integer, name character varying, active boolean)
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		RETURN QUERY 
+		SELECT g.id, g.name, g.active 
+		FROM user_groups g
+		WHERE g.id = group_id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_usergroup_get(group_id integer) OWNER TO postgres;
+
+--
+-- Name: fn_usergroup_insert(character varying, boolean); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_usergroup_insert(name character varying, active boolean) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$ 
+	BEGIN 
+		INSERT INTO user_groups (name, active) 
+		VALUES (name, active)
+		RETURNING id;
+	END;$$;
+
+
+ALTER FUNCTION public.fn_usergroup_insert(name character varying, active boolean) OWNER TO postgres;
+
+--
+-- Name: fn_usergroup_update(integer, character varying, boolean); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_usergroup_update(id integer, name character varying, active boolean) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN 
+	UPDATE user_groups 
+	SET name = name,
+	active = active
+	WHERE id = id;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_usergroup_update(id integer, name character varying, active boolean) OWNER TO postgres;
+
+--
 -- Name: sp_document_delete(integer); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
@@ -86,6 +413,20 @@ $$;
 
 
 ALTER PROCEDURE public.sp_group_user_delete(group_id integer, user_id integer) OWNER TO postgres;
+
+--
+-- Name: sp_group_user_insert(integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.sp_group_user_insert(group_id integer, user_id integer)
+    LANGUAGE sql
+    AS $$
+INSERT INTO group_users (group_id, user_id) 
+VALUES (group_id, user_id)
+$$;
+
+
+ALTER PROCEDURE public.sp_group_user_insert(group_id integer, user_id integer) OWNER TO postgres;
 
 --
 -- Name: sp_group_users_insert(integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
@@ -415,6 +756,20 @@ CREATE TABLE public.roles (
 ALTER TABLE public.roles OWNER TO postgres;
 
 --
+-- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.roles ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: user_groups; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -455,6 +810,20 @@ CREATE TABLE public.user_roles (
 ALTER TABLE public.user_roles OWNER TO postgres;
 
 --
+-- Name: user_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.user_roles ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.user_roles_id_seq
+    START WITH 200
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -462,8 +831,7 @@ CREATE TABLE public.users (
     id integer NOT NULL,
     email_address character varying(150) NOT NULL,
     password character varying(500) NOT NULL,
-    active boolean NOT NULL,
-    roles character varying[]
+    active boolean NOT NULL
 );
 
 
@@ -528,6 +896,8 @@ COPY public.group_users (group_id, user_id) FROM stdin;
 --
 
 COPY public.roles (id, name, description) FROM stdin;
+1	administrator	full CRUD permissions
+2	manager	document upload and download permissions
 \.
 
 
@@ -536,8 +906,6 @@ COPY public.roles (id, name, description) FROM stdin;
 --
 
 COPY public.user_groups (id, name, active) FROM stdin;
-100	test1	t
-101	test 2	t
 \.
 
 
@@ -553,8 +921,7 @@ COPY public.user_roles (id, user_id, role) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (id, email_address, password, active, roles) FROM stdin;
-186	joetest@test123.com	10000.mwnYsnkuQK3mpxqXQWWUdg==.U+OgQRGRDK8nfELt172RaTSEObh2MmPU3PkXBoNhcfs=	t	{Administrator}
+COPY public.users (id, email_address, password, active) FROM stdin;
 \.
 
 
@@ -566,6 +933,13 @@ SELECT pg_catalog.setval('public."Documents_Id_seq"', 10000, false);
 
 
 --
+-- Name: roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.roles_id_seq', 2, true);
+
+
+--
 -- Name: user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -573,10 +947,17 @@ SELECT pg_catalog.setval('public.user_groups_id_seq', 101, true);
 
 
 --
+-- Name: user_roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_roles_id_seq', 200, true);
+
+
+--
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 186, true);
+SELECT pg_catalog.setval('public.users_id_seq', 197, true);
 
 
 --

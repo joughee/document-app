@@ -32,7 +32,7 @@ namespace DemoApp.Api.Services
         {
             var user = await _userRepo.GetUserByUserName(model.Username);
 
-            if (PasswordUtility.CheckPassword(user.PasswordHash, model.Password))
+            if (user != null && PasswordUtility.CheckPassword(user.PasswordHash, model.Password))
             {
                 var token = generateJwtToken(user);
                 return new AuthenticateResponse(user, token);
@@ -53,7 +53,7 @@ namespace DemoApp.Api.Services
             return await _userRepo.GetUserByUserName(userName);
         }
 
-        public async Task<int> CreateUser(User user)
+        public async Task<int?> CreateUser(User user)
         {
             user.PasswordHash = PasswordUtility.EncryptPassword(user.Password, _appSettings.HashIterations);
             return await _userRepo.CreateUser(user);
@@ -61,6 +61,10 @@ namespace DemoApp.Api.Services
 
         public async Task<bool> UpdateUser(User user)
         {
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                user.PasswordHash = PasswordUtility.EncryptPassword(user.Password, _appSettings.HashIterations);
+            }
             return await _userRepo.UpdateUser(user);
         }
 

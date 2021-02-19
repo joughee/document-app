@@ -11,17 +11,17 @@ namespace DemoApp.Infrastructure.Utilities
 {
     public static class PasswordUtility
     {
-        private const int SaltSize = 16; // 128 bit 
-        private const int KeySize = 32; // 256 bit
+        private const int saltSize = 16; // 128 bit 
+        private const int keySize = 32; // 256 bit
         public static string EncryptPassword(string password, int iterations)
         {
             using (var algorithm = new Rfc2898DeriveBytes(
               password,
-              SaltSize,
+              saltSize,
               iterations,
               HashAlgorithmName.SHA512))
             {
-                var key = Convert.ToBase64String(algorithm.GetBytes(KeySize));
+                var key = Convert.ToBase64String(algorithm.GetBytes(keySize));
                 var salt = Convert.ToBase64String(algorithm.Salt);
 
                 return $"{iterations}.{salt}.{key}";
@@ -48,7 +48,7 @@ namespace DemoApp.Infrastructure.Utilities
               iterations,
               HashAlgorithmName.SHA512))
             {
-                var keyToCheck = algorithm.GetBytes(KeySize);
+                var keyToCheck = algorithm.GetBytes(keySize);
 
                 var verified = keyToCheck.SequenceEqual(key);
 

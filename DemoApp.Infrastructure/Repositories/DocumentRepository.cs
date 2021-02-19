@@ -23,7 +23,7 @@ namespace DemoApp.Infrastructure.Repositories
         {
             return await _dataAccess.DownloadDocument(id);
         }
-        public async Task<int> UploadDocument(Document dto)
+        public async Task<int?> UploadDocument(Document dto)
         {
             var document = new Document
             {

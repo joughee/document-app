@@ -7,6 +7,6 @@ namespace DemoApp.Core.Interfaces
     public interface IDocumentRepository
     {
         Task<Document> GetDocumentById(int docId);
-        Task<int> UploadDocument(Document dto);
+        Task<int?> UploadDocument(Document dto);
     }
 }

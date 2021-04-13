@@ -906,6 +906,8 @@ COPY public.roles (id, name, description) FROM stdin;
 --
 
 COPY public.user_groups (id, name, active) FROM stdin;
+100	test1	t
+101	test 2	t
 \.
 
 
@@ -914,6 +916,9 @@ COPY public.user_groups (id, name, active) FROM stdin;
 --
 
 COPY public.user_roles (id, user_id, role) FROM stdin;
+401	192	administrator
+601	192	manager
+200	197	manager
 \.
 
 
@@ -922,6 +927,9 @@ COPY public.user_roles (id, user_id, role) FROM stdin;
 --
 
 COPY public.users (id, email_address, password, active) FROM stdin;
+192	joetest2@test123.com	10000.qL0wnD8FETUxd4R5U9+Dig==.G75gkyhpvHC7Dxpun/dp/nqOzd3HHc1h9N4Kdx+C320=	t
+197	joetest3@test123.com	10000.fKvVCAmG14LGWAh8x4x57w==.B7mmy4Vq9sNRxUR+ttxFlYXEqm94KgkZ6QOSEsqQcEU=	t
+186	joetest@test123.com	10000.mwnYsnkuQK3mpxqXQWWUdg==.U+OgQRGRDK8nfELt172RaTSEObh2MmPU3PkXBoNhcfs=	f
 \.
 
 

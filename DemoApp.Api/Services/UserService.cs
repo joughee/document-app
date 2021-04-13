@@ -91,7 +91,7 @@ namespace DemoApp.Api.Services
             var key = Encoding.ASCII.GetBytes(_appSettings.AuthKey);
             var claimIdentity = new ClaimsIdentity();
             claimIdentity.AddClaim(new Claim(ClaimTypes.Name, user.Id.ToString()));
-            if (user.Roles.Any())
+            if (user.Roles != null && user.Roles.Any())
             {
                 foreach(var role in user.Roles)
                 {
